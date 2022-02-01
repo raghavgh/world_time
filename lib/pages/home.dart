@@ -8,20 +8,70 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+
+  Map data = {};
   @override
   Widget build(BuildContext context) {
+    data = ModalRoute.of(context)!.settings.arguments as Map;
+    print(data);
+
+    String bgImage = data['isDayTime']?'https://raw.githubusercontent.com/iamshaunjp/flutter-beginners-tutorial/lesson-33/world_time_app/assets/day.png':'https://raw.githubusercontent.com/iamshaunjp/flutter-beginners-tutorial/lesson-33/world_time_app/assets/night.png';
+    Color? bgColor = data['isDayTime']?Colors.blue:Colors.indigo[700];
     return Scaffold(
+      backgroundColor: bgColor,
       body: SafeArea(
-          child: Column(
+          child: Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: NetworkImage(bgImage),
+                fit: BoxFit.fill,
+              )
+            ),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(0, 120.0, 0, 0),
+              child: Column(
         children: [
-          TextButton.icon(
-              onPressed: () {
-                Navigator.pushNamed(context, '/location');
-              },
-              icon: Icon(Icons.edit_location),
-              label: Text('Edit Loaction'))
+              TextButton.icon(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/location');
+                  },
+                  icon: Icon(
+                      Icons.edit_location,
+                    color: Colors.grey[300],
+                  ),
+                  label: Text(
+                      'Edit Loaction',
+                    style: TextStyle(
+                      color: Colors.grey[300]
+                    ),
+                  ),
+              ),
+              SizedBox(height: 40.0,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    data['location'],
+                    style: TextStyle(
+                      fontSize: 28.0,
+                      letterSpacing: 2.0,
+                      color: Colors.white,
+                    ),
+                  )
+                ],
+              ),
+            SizedBox(height: 20.0,),
+            Text(
+              data['time'],
+              style: TextStyle(
+                fontSize: 60.0,
+                color: Colors.white,
+              ),
+            )
         ],
-      )),
+      ),
+            ),
+          )),
     );
   }
 }
